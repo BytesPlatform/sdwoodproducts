@@ -99,7 +99,6 @@ function Contact() {
       <div id="contact" className='pt-20 bg-[#fafafa]'>
         <div className="container1">
           <span className="big-circle"></span>
-          <Image src="/img/shape.png" className="square" alt="Decorative shape" width={100} height={100} />
           <div className="form">
             <div className="contact-info">
               <h3 className="title">Let&apos;s get in touch</h3>
