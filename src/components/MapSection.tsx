@@ -5,7 +5,7 @@ export default function MapSection() {
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-gray-900 mb-4">Find Us</h2>
           <p className="text-xl text-gray-600">Visit our location or get directions</p>
-          <div className="w-24 h-1 bg-blue-600 mx-auto mt-4"></div>
+          <div className="w-24 h-1 bg-amber-800 mx-auto mt-4"></div>
         </div>
         
         <div className="bg-gray-100 rounded-2xl overflow-hidden shadow-xl">
@@ -18,14 +18,14 @@ export default function MapSection() {
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-2">Silver Dollar Wood Products LLC</h3>
               <p className="text-gray-600 mb-4">Your trusted wood products supplier</p>
-              <a
-                href="https://maps.google.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium"
-              >
-                Get Directions
-              </a>
+                              <a
+                  href="https://maps.google.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block bg-amber-800 text-white px-6 py-3 rounded-lg hover:bg-amber-900 transition-colors font-medium"
+                >
+                  Get Directions
+                </a>
             </div>
           </div>
         </div>
