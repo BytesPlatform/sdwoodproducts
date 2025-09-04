@@ -46,17 +46,17 @@ export default function Hero() {
     }, 1000);
   };
 
-  const goToSlide = (index: number) => {
-    if (isTransitioning) return;
+  // const goToSlide = (index: number) => {
+  //   if (isTransitioning) return;
     
-    setIsTransitioning(true);
-    setCurrentSlide(index);
+  //   setIsTransitioning(true);
+  //   setCurrentSlide(index);
     
-    // Reset transition state after animation completes
-    setTimeout(() => {
-      setIsTransitioning(false);
-    }, 1000);
-  };
+  //   // Reset transition state after animation completes
+  //   setTimeout(() => {
+  //     setIsTransitioning(false);
+  //   }, 1000);
+  // };
 
   return (
     <section 
