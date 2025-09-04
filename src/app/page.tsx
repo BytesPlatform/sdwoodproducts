@@ -3,7 +3,7 @@ import Hero from '@/components/Hero';
 import AboutUs from '@/components/AboutUs';
 import OurContributions from '@/components/OurContributions';
 import ContactForm from '@/components/ContactForm';
-import MapSection from '@/components/MapSection';
+import MapSectionWrapper from '@/components/MapSectionWrapper';
 import Footer from '@/components/Footer';
 
 export default function Home() {
@@ -14,7 +14,7 @@ export default function Home() {
       <AboutUs />
       <OurContributions />
       <ContactForm />
-      <MapSection />
+      <MapSectionWrapper />
       <Footer />
     </div>
   );

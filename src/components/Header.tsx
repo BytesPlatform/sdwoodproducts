@@ -5,16 +5,34 @@ import Image from 'next/image';
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  // Ensure page starts from top on refresh
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
       setIsScrolled(scrollTop > 50);
+      
+      // Hide/show header based on scroll direction
+      if (scrollTop > lastScrollY && scrollTop > 100) {
+        // Scrolling down
+        setIsVisible(false);
+      } else {
+        // Scrolling up
+        setIsVisible(true);
+      }
+      
+      setLastScrollY(scrollTop);
     };
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [lastScrollY]);
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -26,9 +44,18 @@ export default function Header() {
     }
   };
 
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
   return (
     <header 
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        isVisible ? 'translate-y-0' : '-translate-y-full'
+      } ${
         isScrolled 
           ? 'bg-white/95 backdrop-blur-sm border-b border-gray-200' 
           : 'bg-transparent'
@@ -37,7 +64,10 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-8 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4">
           {/* Logo */}
-          <div className="flex items-center space-x-3">
+          <button 
+            onClick={scrollToTop}
+            className="flex items-center space-x-3 hover:opacity-80 transition-opacity cursor-pointer"
+          >
             <div className="w-12 h-12 relative">
               <Image
                 src="/home/logo.webp"
@@ -54,7 +84,7 @@ export default function Header() {
                 Silver Dollar
               </h1>
             </div>
-          </div>
+          </button>
 
           {/* Navigation */}
           <nav className="hidden md:flex space-x-8">
@@ -67,6 +97,14 @@ export default function Header() {
               Home
             </button>
             <button 
+              onClick={() => scrollToSection('about')}
+              className={`transition-colors hover:text-amber-800 ${
+                isScrolled ? 'text-gray-700' : 'text-white'
+              }`}
+            >
+              About
+            </button>
+            <button 
               onClick={() => scrollToSection('products')}
               className={`transition-colors hover:text-amber-800 ${
                 isScrolled ? 'text-gray-700' : 'text-white'
@@ -75,12 +113,12 @@ export default function Header() {
               Products
             </button>
             <button 
-              onClick={() => scrollToSection('about')}
+              onClick={() => scrollToSection('contributions')}
               className={`transition-colors hover:text-amber-800 ${
                 isScrolled ? 'text-gray-700' : 'text-white'
               }`}
             >
-              About
+              Contributions
             </button>
             <button 
               onClick={() => scrollToSection('contact')}
