@@ -1,6 +1,30 @@
+'use client';
+
+import Image from 'next/image';
+import { useEffect, useRef, useState } from 'react';
+
 export default function OurContributions() {
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
   return (
-    <section id="products" className="py-20 bg-white">
+    <section ref={sectionRef} id="products" className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-gray-900 mb-4">Our Contributions</h2>
@@ -10,21 +34,24 @@ export default function OurContributions() {
         
         <div className="grid md:grid-cols-3 gap-8">
           {/* Racetracks/Agricultural Supply Stores */}
-          <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
-                          <div className="h-64 bg-gradient-to-br from-amber-100 to-amber-200 flex items-center justify-center">
-                <div className="text-center">
-                  <div className="w-20 h-20 bg-amber-800 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg className="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                    </svg>
-                  </div>
-                  <div className="w-32 h-16 bg-white rounded border-2 border-amber-300 flex items-center justify-center">
-                    <span className="text-xs font-bold text-amber-800">SILVER DOLLAR</span>
-                  </div>
-                </div>
+          <div className={`bg-white rounded-xl shadow-2xl overflow-hidden hover:shadow-3xl hover:scale-105 hover:bg-orange-100 transition-all duration-400 transform group ${
+            isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+          }`}>
+            {/* Image Header */}
+            <div className="flex justify-center">
+              <div className="relative w-72">
+                <Image
+                  src="/home/cards/race-track.webp"
+                  alt="Race track"
+                  width={400}
+                  height={300}
+                  className="w-full h-auto object-cover"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                />
               </div>
+            </div>
             <div className="p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-3">Racetracks/Agricultural Supply Stores</h3>
+              <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:after:w-full after:content-[''] after:block after:h-0.5 after:bg-amber-800 after:transition-all after:duration-400 after:w-0">Racetracks/Agricultural Supply Stores</h3>
               <p className="text-gray-600">
                 Wood shavings make stall clean-up easy and they promote animal health by keeping feet dry.
               </p>
@@ -32,19 +59,24 @@ export default function OurContributions() {
           </div>
 
           {/* Zoos and Large Farms */}
-          <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
-            <div className="h-64 bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center">
-              <div className="text-center">
-                <div className="w-20 h-20 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                  </svg>
-                </div>
-                <div className="text-4xl">🦒</div>
+          <div className={`bg-white rounded-xl shadow-2xl overflow-hidden hover:shadow-3xl hover:scale-105 hover:bg-orange-100 transition-all duration-400 transform delay-200 group ${
+            isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+          }`}>
+            {/* Image Header */}
+            <div className="flex justify-center">
+              <div className="relative w-72">
+                <Image
+                  src="/home/cards/zoo-picture-1-1.webp"
+                  alt="Zoo animals"
+                  width={400}
+                  height={300}
+                  className="w-full h-auto object-cover"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                />
               </div>
             </div>
             <div className="p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-3">Zoos and Large Farms</h3>
+              <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:after:w-full after:content-[''] after:block after:h-0.5 after:bg-amber-800 after:transition-all after:duration-400 after:w-0">Zoos and Large Farms</h3>
               <p className="text-gray-600">
                 Our shavings are trusted by some of the largest zoos in the SW region of the US. Ask about their benefits today!
               </p>
@@ -52,19 +84,24 @@ export default function OurContributions() {
           </div>
 
           {/* Post Fire Clean-Up and Construction */}
-          <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
-            <div className="h-64 bg-gradient-to-br from-orange-100 to-orange-200 flex items-center justify-center">
-              <div className="text-center">
-                <div className="w-20 h-20 bg-orange-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                  </svg>
-                </div>
-                <div className="w-24 h-8 bg-orange-400 rounded-full"></div>
+          <div className={`bg-white rounded-xl shadow-2xl overflow-hidden hover:shadow-3xl hover:scale-105 hover:bg-amber-600/20 transition-all duration-400 transform delay-200 group ${
+            isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+          }`}>
+            {/* Image Header */}
+            <div className="flex justify-center">
+              <div className="relative w-72">
+                <Image
+                  src="/home/cards/wattle-post-fire-1-1.webp"
+                  alt="Post fire clean-up"
+                  width={400}
+                  height={300}
+                  className="w-full h-auto object-cover"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                />
               </div>
             </div>
             <div className="p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-3">Post Fire Clean-Up and Construction</h3>
+              <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:after:w-full after:content-[''] after:block after:h-0.5 after:bg-amber-800 after:transition-all after:duration-400 after:w-0">Post Fire Clean-Up and Construction</h3>
               <p className="text-gray-600">
                 Run-off after fires or construction projects can be dangerous and hazardous to water health. Wattles can help!
               </p>
