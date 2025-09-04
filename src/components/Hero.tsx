@@ -1,11 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 
 export default function Hero() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [ripples, setRipples] = useState<Array<{ id: number; x: number; y: number }>>([]);
+  const sectionRef = useRef<HTMLElement>(null);
   
   const slides = [
     {
@@ -34,8 +36,32 @@ export default function Hero() {
     return () => clearInterval(timer);
   }, [slides.length]);
 
-  const handleClick = () => {
+  const createRipple = (event: React.MouseEvent<HTMLElement>) => {
+    if (!sectionRef.current) return;
+    
+    const rect = sectionRef.current.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    
+    const newRipple = {
+      id: Date.now(),
+      x,
+      y
+    };
+    
+    setRipples(prev => [...prev, newRipple]);
+    
+    // Remove ripple after animation (longest animation is 1.6s + 0.4s delay = 2s)
+    setTimeout(() => {
+      setRipples(prev => prev.filter(ripple => ripple.id !== newRipple.id));
+    }, 2000);
+  };
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     if (isTransitioning) return;
+    
+    // Create ripple effect
+    createRipple(event);
     
     setIsTransitioning(true);
     setCurrentSlide((prev) => (prev + 1) % slides.length);
@@ -60,6 +86,7 @@ export default function Hero() {
 
   return (
     <section 
+      ref={sectionRef}
       id="home" 
       className="relative h-screen flex items-center justify-center overflow-hidden cursor-pointer group"
       onClick={handleClick}
@@ -91,7 +118,50 @@ export default function Hero() {
         isTransitioning ? 'opacity-90' : 'opacity-100'
       }`}></div>
 
-      
+      {/* Droplet Ripple Effects */}
+      {ripples.map((ripple) => (
+        <div
+          key={ripple.id}
+          className="absolute pointer-events-none z-20"
+          style={{
+            left: ripple.x,
+            top: ripple.y,
+            transform: 'translate(-50%, -50%)',
+          }}
+        >
+          {/* First ripple ring */}
+          <div
+            className="absolute border-2 border-white/60 rounded-full"
+            style={{
+              animation: 'droplet-ripple 1.2s ease-out',
+              left: '50%',
+              top: '50%',
+              transform: 'translate(-50%, -50%)',
+            }}
+          />
+          {/* Second ripple ring with delay */}
+          <div
+            className="absolute border-2 border-white/40 rounded-full"
+            style={{
+              animation: 'droplet-ripple-2 1.4s ease-out 0.2s',
+              left: '50%',
+              top: '50%',
+              transform: 'translate(-50%, -50%)',
+            }}
+          />
+          {/* Third ripple ring with longer delay */}
+          <div
+            className="absolute border-2 border-white/20 rounded-full"
+            style={{
+              animation: 'droplet-ripple-3 1.6s ease-out 0.4s',
+              left: '50%',
+              top: '50%',
+              transform: 'translate(-50%, -50%)',
+            }}
+          />
+        </div>
+      ))}
+
       {/* Content with subtle hover effect */}
       <div className="relative z-20 text-center text-white px-4 transition-transform duration-300 group-hover:scale-105">
         <h1 className="text-5xl md:text-7xl font-semibold mb-6 leading-tight" style={{ fontFamily: 'var(--font-poppins)' }}>

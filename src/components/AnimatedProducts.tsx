@@ -78,7 +78,8 @@ export const AnimatedProducts = ({
   };
 
   return (
-         <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 ${className}`}>
+    <section id="products" className={`py-20 ${className}`}>
+         <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12`}>
              <div className="text-center mb-16">
         <h2 className="text-3xl font-bold text-gray-900 mb-2" style={{ fontFamily: 'var(--font-poppins)' }}>
           Our Trusted Products!
@@ -214,13 +215,16 @@ export const AnimatedProducts = ({
                    <div className="absolute inset-0 bg-white transform scale-0 rounded-full origin-top-left group-hover:scale-150 transition-transform duration-500 ease-out"></div>
                  </a>
                ) : (
-                 <button
-                   disabled
-                   className="bg-amber-800 text-white px-6 py-3 rounded-lg font-medium cursor-not-allowed opacity-60"
+                 <a
+                   href="#contact"
+                   className="group relative inline-block bg-amber-800 text-white px-6 py-3 rounded-lg overflow-hidden font-medium transition-all duration-500 border-2 border-amber-800"
                    style={{ fontFamily: 'var(--font-poppins)' }}
                  >
-                   Contact for Sample
-                 </button>
+                   <span className="relative z-10 group-hover:text-amber-800 transition-colors duration-500">
+                     Learn More
+                   </span>
+                   <div className="absolute inset-0 bg-white transform scale-0 rounded-full origin-top-left group-hover:scale-150 transition-transform duration-500 ease-out"></div>
+                 </a>
                )}
             </motion.div>
 
@@ -244,5 +248,6 @@ export const AnimatedProducts = ({
       </div>
 
     </div>
+    </section>
   );
 };
