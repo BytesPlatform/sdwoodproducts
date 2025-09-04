@@ -1,130 +1,191 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
+import React, { useState, useRef } from 'react';
+import Image from 'next/image';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLocationDot, faEnvelope, faPhoneVolume } from '@fortawesome/free-solid-svg-icons';
+import { faFacebookF, faInstagram, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
+import "./contact.css";
 
-export default function ContactForm() {
+// EmailJS type declarations
+declare global {
+  interface Window {
+    emailjs: {
+      sendForm: (serviceId: string, templateId: string, form: HTMLFormElement) => Promise<unknown>;
+    };
+  }
+}
+
+function Contact() {
+  const formRef = useRef<HTMLFormElement>(null);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
-    company: '',
     message: ''
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+  const [errors, setErrors] = useState<{email?: string; phone?: string}>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  // Accept 10-digit US numbers with optional formatting
+  const phoneRegex = /^(?:\+1\s?)?(?:\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4})$/;
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prevState => ({ ...prevState, [name]: value }));
+
+    // live validation
+    if (name === 'email') {
+      setErrors(prev => ({ ...prev, email: emailRegex.test(value) ? '' : 'Invalid email address' }));
+    }
+    if (name === 'phone') {
+      // Allow only digits and limited formatting characters while typing
+      const cleaned = value.replace(/[^0-9\s().+-]/g, '');
+      const digitsOnly = cleaned.replace(/\D/g, '');
+      if (digitsOnly.length > 10) {
+        // prevent input beyond 10 significant digits (ignoring +1 which we strip)
+        return;
+      }
+      setFormData(prevState => ({ ...prevState, phone: cleaned }));
+      setErrors(prev => ({ ...prev, phone: phoneRegex.test(cleaned) ? '' : 'Enter a valid 10-digit phone number' }));
+      return;
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log('Form submitted:', formData);
+
+    // final validation check
+    const emailError = emailRegex.test(formData.email) ? '' : 'Invalid email address';
+    const phoneError = phoneRegex.test(formData.phone) ? '' : 'Enter a valid 10-digit phone number';
+    if (emailError || phoneError) {
+      setErrors({ email: emailError, phone: phoneError });
+      return;
+    }
+
+    setIsSubmitting(true);
+    setSubmitStatus('idle');
+
+    // Use EmailJS to send the form
+    if (typeof window !== 'undefined' && window.emailjs && formRef.current) {
+      window.emailjs.sendForm('your_service_id', 'your_template_id', formRef.current)
+        .then(() => {
+          setSubmitStatus('success');
+          setFormData({ name: '', email: '', phone: '', message: '' });
+          if (formRef.current) {
+            formRef.current.reset();
+          }
+        })
+        .catch((error: unknown) => {
+          console.error('FAILED...', error);
+          setSubmitStatus('error');
+        })
+        .finally(() => {
+          setIsSubmitting(false);
+        });
+    } else {
+      setIsSubmitting(false);
+      setSubmitStatus('error');
+    }
   };
 
   return (
-    <section id="contact" className="py-20 bg-gray-50">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">Have a question? Contact us today!</h2>
-          <div className="w-24 h-1 bg-amber-800 mx-auto"></div>
-        </div>
-        
-        <div className="bg-white rounded-2xl shadow-xl p-8">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-                  Full Name *
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  required
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors"
-                  placeholder="Your full name"
-                />
+    <>
+     
+      {/* Contact Form Section */}
+      <div id="contact" className='pt-20 bg-[#fafafa]'>
+        <div className="container1">
+          <span className="big-circle"></span>
+          <Image src="/img/shape.png" className="square" alt="Decorative shape" width={100} height={100} />
+          <div className="form">
+            <div className="contact-info">
+              <h3 className="title">Let&apos;s get in touch</h3>
+              <p className="text">
+              We&apos;d love to hear from you! Whether you have a question or feedback, feel free to reach out. Contact us through the form below or via our social media channels.  
+              </p>
+
+              <div className="info">
+                <div className="information">
+                  <FontAwesomeIcon icon={faLocationDot} className="icon" />
+                  <a href="https://www.google.com/maps/search/?api=1&query=100+N+Hwy+445+Maxwell,+NM+87728" target="_blank" rel="noopener noreferrer">100 N Hwy 445 Maxwell, NM 87728</a>
+                </div>
+                <div className="information">
+                  <FontAwesomeIcon icon={faEnvelope} className="icon" />
+                  <a href="mailto:office@sdwoodproducts.com">office@sdwoodproducts.com</a>
+                </div>
+                <div className="information">
+                  <FontAwesomeIcon icon={faPhoneVolume} className="icon" />
+                  <a href="tel:+15753752636">+1 575-375-2636</a>
+                </div>
               </div>
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                  Email Address *
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  required
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors"
-                  placeholder="your.email@example.com"
-                />
-              </div>
-            </div>
-            
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
-                  Phone Number
-                </label>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors"
-                  placeholder="(555) 123-4567"
-                />
-              </div>
-              <div>
-                <label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-2">
-                  Company Name
-                </label>
-                <input
-                  type="text"
-                  id="company"
-                  name="company"
-                  value={formData.company}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors"
-                  placeholder="Your company name"
-                />
+
+              <div className="social-media">
+                <p>Connect with us :</p>
+                <div className="social-icons">
+                  <a href="#" target="_blank" rel="noopener noreferrer">
+                    <FontAwesomeIcon icon={faFacebookF} />
+                  </a>
+                  <a href="#" target="_blank" rel="noopener noreferrer">
+                    <FontAwesomeIcon icon={faInstagram} />
+                  </a>
+                  <a href="#" target="_blank" rel="noopener noreferrer">
+                    <FontAwesomeIcon icon={faLinkedinIn} />
+                  </a>
+                </div>
               </div>
             </div>
-            
-            <div>
-              <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
-                Message *
-              </label>
-              <textarea
-                id="message"
-                name="message"
-                required
-                rows={6}
-                value={formData.message}
-                onChange={handleInputChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors resize-none"
-                placeholder="Tell us about your needs, project requirements, or any questions you have..."
-              ></textarea>
+
+            <div className="contact-form">
+              <span className="circle one"></span>
+              <span className="circle two"></span>
+
+              <form ref={formRef} className="sub-form" action="index.html" autoComplete="off" onSubmit={handleSubmit}>
+                <h3 className="title">Contact us</h3>
+                <div className="input-container">
+                  <input type="text" name="name" className="input" placeholder="Username" value={formData.name} onChange={handleChange} />
+                </div>
+                <div className="input-container">
+                  <input type="email" name="email" className="input" placeholder="Email" value={formData.email} onChange={handleChange} />
+                  {errors.email && <span className="error-text">{errors.email}</span>}
+                </div>
+                <div className="input-container">
+                  <input type="tel" name="phone" className="input" placeholder="Phone" value={formData.phone} onChange={handleChange} />
+                  {errors.phone && <span className="error-text">{errors.phone}</span>}
+                </div>
+                <div className="input-container textarea">
+                  <textarea name="message" className="input" placeholder="Message" value={formData.message} onChange={handleChange}></textarea>
+                </div>
+                
+                {/* Status Messages */}
+                {submitStatus === 'success' && (
+                  <div className="success-message" style={{ color: 'green', marginBottom: '10px', textAlign: 'center' }}>
+                    Message sent successfully!
+                  </div>
+                )}
+                {submitStatus === 'error' && (
+                  <div className="error-message" style={{ color: 'red', marginBottom: '10px', textAlign: 'center' }}>
+                    Failed to send message. Please try again.
+                  </div>
+                )}
+                
+                <input 
+                  type="submit" 
+                  data-cta="true" 
+                  value={isSubmitting ? "Sending..." : "Send"} 
+                  className="btn" 
+                  disabled={isSubmitting}
+                />
+              </form>
             </div>
-            
-            <div className="text-center">
-                              <button
-                  type="submit"
-                  className="bg-amber-800 text-white px-8 py-3 rounded-lg hover:bg-amber-900 transition-colors font-medium text-lg"
-                >
-                  Send Message
-                </button>
-            </div>
-          </form>
+          </div>
         </div>
       </div>
-    </section>
+    </>
   );
 }
+
+export default Contact;
+export const ContactSection = Contact;

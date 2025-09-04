@@ -4,7 +4,7 @@ import AboutUs from '@/components/AboutUs';
 import { AnimatedProducts } from '@/components/AnimatedProducts';
 import OurContributions from '@/components/OurContributions';
 import ContactForm from '@/components/ContactForm';
-import MapSection from '@/components/MapSection';
+import MapSectionWrapper from '@/components/MapSectionWrapper';
 import Footer from '@/components/Footer';
 
 export default function Home() {
@@ -64,7 +64,7 @@ export default function Home() {
       <AnimatedProducts products={products} autoplay={true} className="bg-white" />
       <OurContributions />
       <ContactForm />
-      <MapSection />
+      <MapSectionWrapper />
       <Footer />
     </div>
   );
