@@ -1,17 +1,17 @@
 "use client";
 
 import React, { useState, useRef } from 'react';
+import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationDot, faEnvelope, faPhoneVolume } from '@fortawesome/free-solid-svg-icons';
 import { faFacebookF, faInstagram, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
 import "./contact.css";
-import Image from 'next/image';
 
 // EmailJS type declarations
 declare global {
   interface Window {
     emailjs: {
-      sendForm: (serviceId: string, templateId: string, form: HTMLFormElement) => Promise<any>;
+      sendForm: (serviceId: string, templateId: string, form: HTMLFormElement) => Promise<unknown>;
     };
   }
 }
@@ -43,7 +43,7 @@ function Contact() {
     }
     if (name === 'phone') {
       // Allow only digits and limited formatting characters while typing
-      let cleaned = value.replace(/[^0-9\s().+-]/g, '');
+      const cleaned = value.replace(/[^0-9\s().+-]/g, '');
       const digitsOnly = cleaned.replace(/\D/g, '');
       if (digitsOnly.length > 10) {
         // prevent input beyond 10 significant digits (ignoring +1 which we strip)
@@ -79,7 +79,7 @@ function Contact() {
             formRef.current.reset();
           }
         })
-        .catch((error: any) => {
+        .catch((error: unknown) => {
           console.error('FAILED...', error);
           setSubmitStatus('error');
         })
@@ -99,12 +99,12 @@ function Contact() {
       <div id="contact" className='pt-20 bg-[#fafafa]'>
         <div className="container1">
           <span className="big-circle"></span>
-          <img src="img/shape.png" className="square" alt="" />
+          <Image src="/img/shape.png" className="square" alt="Decorative shape" width={100} height={100} />
           <div className="form">
             <div className="contact-info">
-              <h3 className="title">Let's get in touch</h3>
+              <h3 className="title">Let&apos;s get in touch</h3>
               <p className="text">
-              We'd love to hear from you! Whether you have a question or feedback, feel free to reach out. Contact us through the form below or via our social media channels.  
+              We&apos;d love to hear from you! Whether you have a question or feedback, feel free to reach out. Contact us through the form below or via our social media channels.  
               </p>
 
               <div className="info">

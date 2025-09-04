@@ -1,10 +1,11 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
 // Fix for default markers in Leaflet with Next.js
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
@@ -33,12 +34,11 @@ export default function MapSection() {
   const mapInstanceRef = useRef<L.Map | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
-  const [isZooming, setIsZooming] = useState(false); // Track zoom animation state
+  // const [isZooming, setIsZooming] = useState(false); // Track zoom animation state
   const markersRef = useRef<L.CircleMarker[]>([]); // Store references to all markers
   // State for map type (street or satellite)
   const [mapType, setMapType] = useState<'street' | 'satellite'>('satellite');
   const tileLayersRef = useRef<{ street: L.TileLayer | null; satellite: L.TileLayer | null }>({ street: null, satellite: null });
-
   // Load expanded state from localStorage on mount
   useEffect(() => {
     const savedState = localStorage.getItem('mapExpanded');
@@ -72,7 +72,7 @@ export default function MapSection() {
   };
 
   // Function to recreate all markers after animation
-  const recreateAllMarkers = (map: L.Map, shouldFitBounds: boolean = true) => {
+  const recreateAllMarkers = useCallback((map: L.Map, shouldFitBounds: boolean = true) => {
     // Create bounds to fit all markers
     const bounds = L.latLngBounds([]);
 
@@ -125,7 +125,7 @@ export default function MapSection() {
         map.setZoom(minZoom);
       }
     }
-  };
+  }, []);
 
   // Helper: choose zoom levels depending on viewport (mobile vs desktop)
   const getDefaultZoom = () => {
@@ -134,7 +134,7 @@ export default function MapSection() {
   };
 
   // Function to initialize map with specific expanded state
-  const initializeMapWithState = (expandedState: boolean) => {
+  const initializeMapWithState = useCallback((expandedState: boolean) => {
     if (!mapRef.current) return;
 
     // Remove existing map if it exists
@@ -201,7 +201,7 @@ export default function MapSection() {
       map.touchZoom.disable();
       console.log('Map initialized with DISABLED zoom controls (minimized)');
     }
-  };
+  }, [mapType, recreateAllMarkers]);
 
   // Initialize map on mount
   useEffect(() => {
@@ -217,7 +217,7 @@ export default function MapSection() {
       // Clear markers array for new map
       markersRef.current = [];
     };
-  }, []);
+  }, [initializeMapWithState, isExpanded]);
 
   // Update map zoom controls when expanded state changes
   useEffect(() => {
