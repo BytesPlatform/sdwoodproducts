@@ -5,24 +5,24 @@ export default function OurContributions() {
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-gray-900 mb-4">Our Contributions</h2>
           <p className="text-xl text-gray-600">Companies/People We Serve!</p>
-          <div className="w-24 h-1 bg-blue-600 mx-auto mt-4"></div>
+          <div className="w-24 h-1 bg-amber-800 mx-auto mt-4"></div>
         </div>
         
         <div className="grid md:grid-cols-3 gap-8">
           {/* Racetracks/Agricultural Supply Stores */}
           <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
-            <div className="h-64 bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
-              <div className="text-center">
-                <div className="w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                  </svg>
-                </div>
-                <div className="w-32 h-16 bg-white rounded border-2 border-blue-300 flex items-center justify-center">
-                  <span className="text-xs font-bold text-blue-600">SILVER DOLLAR</span>
+                          <div className="h-64 bg-gradient-to-br from-amber-100 to-amber-200 flex items-center justify-center">
+                <div className="text-center">
+                  <div className="w-20 h-20 bg-amber-800 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg className="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    </svg>
+                  </div>
+                  <div className="w-32 h-16 bg-white rounded border-2 border-amber-300 flex items-center justify-center">
+                    <span className="text-xs font-bold text-amber-800">SILVER DOLLAR</span>
+                  </div>
                 </div>
               </div>
-            </div>
             <div className="p-6">
               <h3 className="text-xl font-bold text-gray-900 mb-3">Racetracks/Agricultural Supply Stores</h3>
               <p className="text-gray-600">
