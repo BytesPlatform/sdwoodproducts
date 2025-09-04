@@ -1,19 +1,104 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import Image from 'next/image';
+
 export default function Hero() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  
+  const slides = [
+    {
+      src: '/home/hero/slide1.png',
+      alt: 'Silver Dollar Wood Products - Industrial Wood Processing'
+    },
+    {
+      src: '/home/hero/slide2.jpg',
+      alt: 'Quality Wood Shavings Manufacturing'
+    },
+    {
+      src: '/home/hero/slide3.jpg',
+      alt: 'Erosion Control Solutions'
+    },
+    {
+      src: '/home/hero/slide4.jpg',
+      alt: 'Environmental Wood Products'
+    }
+  ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 5000); // Change slide every 5 seconds
+
+    return () => clearInterval(timer);
+  }, [slides.length]);
+
+  const handleClick = () => {
+    if (isTransitioning) return;
+    
+    setIsTransitioning(true);
+    setCurrentSlide((prev) => (prev + 1) % slides.length);
+    
+    // Reset transition state after animation completes
+    setTimeout(() => {
+      setIsTransitioning(false);
+    }, 1000);
+  };
+
+  const goToSlide = (index: number) => {
+    if (isTransitioning) return;
+    
+    setIsTransitioning(true);
+    setCurrentSlide(index);
+    
+    // Reset transition state after animation completes
+    setTimeout(() => {
+      setIsTransitioning(false);
+    }, 1000);
+  };
+
   return (
-    <section id="home" className="relative h-screen flex items-center justify-center overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-r from-gray-900/80 to-gray-800/60 z-10"></div>
-      <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: "url('data:image/svg+xml,%3Csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1200 800\"%3E%3Cdefs%3E%3ClinearGradient id=\"grad\" x1=\"0%25\" y1=\"0%25\" x2=\"100%25\" y2=\"100%25\"%3E%3Cstop offset=\"0%25\" style=\"stop-color:%236b7280;stop-opacity:1\" /%3E%3Cstop offset=\"100%25\" style=\"stop-color:%23374151;stop-opacity:1\" /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=\"1200\" height=\"800\" fill=\"url(%23grad)\"/%3E%3Crect x=\"0\" y=\"600\" width=\"1200\" height=\"200\" fill=\"%23a3a3a3\"/%3E%3Ccircle cx=\"200\" cy=\"500\" r=\"50\" fill=\"%238b5cf6\"/%3E%3Ccircle cx=\"400\" cy=\"450\" r=\"40\" fill=\"%23f59e0b\"/%3E%3Ccircle cx=\"600\" cy=\"480\" r=\"45\" fill=\"%2310b981\"/%3E%3Ccircle cx=\"800\" cy=\"460\" r=\"35\" fill=\"%23ef4444\"/%3E%3Ccircle cx=\"1000\" cy=\"490\" r=\"42\" fill=\"%236b7280\"/%3E%3C/svg%3E')"
-        }}
-      ></div>
+    <section 
+      id="home" 
+      className="relative h-screen flex items-center justify-center overflow-hidden cursor-pointer group"
+      onClick={handleClick}
+    >
+      {/* Background Images Slider */}
+      <div className="absolute inset-0">
+        {slides.map((slide, index) => (
+          <div
+            key={index}
+            className={`absolute inset-0 transition-all duration-1000 ease-in-out ${
+              index === currentSlide 
+                ? 'opacity-100 scale-100' 
+                : 'opacity-0 scale-105'
+            }`}
+          >
+            <Image
+              src={slide.src}
+              alt={slide.alt}
+              fill
+              className="object-cover"
+              priority={index === 0}
+            />
+          </div>
+        ))}
+      </div>
+
+      {/* Gradient Overlay with subtle animation */}
+      <div className={`absolute inset-0 bg-gradient-to-r from-gray-900/80 to-gray-800/60 z-10 transition-opacity duration-500 ${
+        isTransitioning ? 'opacity-90' : 'opacity-100'
+      }`}></div>
+
       
-      <div className="relative z-20 text-center text-white px-4">
-        <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-          Silver Dollar Wood Products LLC
+      {/* Content with subtle hover effect */}
+      <div className="relative z-20 text-center text-white px-4 transition-transform duration-300 group-hover:scale-105">
+        <h1 className="text-5xl md:text-7xl font-semibold mb-6 leading-tight" style={{ fontFamily: 'var(--font-poppins)' }}>
+          Silver Dollar Wood<br />
+          Products LLC
         </h1>
-        <p className="text-xl md:text-2xl mb-8 text-gray-200">
+        <p className="text-xl md:text-2xl mb-8 text-gray-200" style={{ fontFamily: 'var(--font-poppins)' }}>
           Family Owned and operated since 1993!
         </p>
         <div className="flex justify-center">

@@ -290,9 +290,8 @@ export default function MapSection() {
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-gray-900 mb-4">Find Us</h2>
           <p className="text-xl text-gray-600">Visit our location or get directions</p>
-          <div className="w-24 h-1 bg-blue-600 mx-auto mt-4"></div>
+          <div className="w-24 h-1 bg-amber-800 mx-auto mt-4"></div>
         </div>
-        
         <div className="relative w-full rounded-2xl overflow-hidden shadow-xl bg-[#0b0e1a] border border-white/10">
           {/* Expand/Collapse Button */}
           <button
