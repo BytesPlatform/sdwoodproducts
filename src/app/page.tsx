@@ -32,6 +32,7 @@ export default function Home() {
         "Excellent for horses and small animals",
         "Superior absorbency",
         "Enhanced comfort",
+        "Low-dust formulation",
         "Sample available upon request"
       ],
       image: "/home/hero/slide2.jpg",
@@ -60,7 +61,7 @@ export default function Home() {
       <Header />
       <Hero />
       <AboutUs />
-      <AnimatedProducts products={products} autoplay={true} className="bg-gray-50" />
+      <AnimatedProducts products={products} autoplay={true} className="bg-white" />
       <OurContributions />
       <ContactForm />
       <MapSection />

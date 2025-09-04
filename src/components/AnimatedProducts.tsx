@@ -78,15 +78,15 @@ export const AnimatedProducts = ({
   };
 
   return (
-    <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 ${className}`}>
-             <div className="text-center mb-12">
+         <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 ${className}`}>
+             <div className="text-center mb-16">
         <h2 className="text-3xl font-bold text-gray-900 mb-2" style={{ fontFamily: 'var(--font-poppins)' }}>
           Our Trusted Products!
         </h2>
         <div className="h-1 bg-amber-800 mx-auto w-24"></div>
       </div>
 
-             <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+             <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-16 items-start min-h-[450px]">
         <div className="flex items-start pt-4">
           <div className="relative h-80 w-full">
             <AnimatePresence>
@@ -138,7 +138,7 @@ export const AnimatedProducts = ({
           </div>
         </div>
         
-        <div className="flex flex-col">
+        <div className="flex flex-col h-full justify-between">
           <motion.div
             key={active}
             initial={{
@@ -157,7 +157,7 @@ export const AnimatedProducts = ({
               duration: 0.2,
               ease: "easeInOut",
             }}
-            className="flex-grow"
+            className="text-center"
           >
             <h3 className="text-2xl font-bold text-gray-900 mb-2" style={{ fontFamily: 'var(--font-poppins)' }}>
               {products[active].title}
@@ -184,7 +184,7 @@ export const AnimatedProducts = ({
                     ease: "easeInOut",
                     delay: 0.1 * index,
                   }}
-                  className="flex items-start mb-2"
+                                     className="flex items-start mb-2"
                 >
                   <svg className="w-4 h-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
@@ -194,19 +194,7 @@ export const AnimatedProducts = ({
               ))}
             </motion.div>
 
-            {/* Coming Soon Badge */}
-            {products[active].status === "coming-soon" && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.3, delay: 0.5 }}
-                className="mb-4"
-              >
-                <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium">
-                  Coming Soon
-                </span>
-              </motion.div>
-            )}
+
 
             {/* CTA Button */}
             <motion.div
@@ -214,26 +202,26 @@ export const AnimatedProducts = ({
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: 0.6 }}
             >
-              {products[active].status === "available" ? (
-                <a
-                  href="#contact"
-                  className={`group relative inline-block ${getColorClasses(products[active].color).icon} text-white px-6 py-3 rounded-lg overflow-hidden font-medium transition-all duration-500 border-2 ${getColorClasses(products[active].color).border}`}
-                  style={{ fontFamily: 'var(--font-poppins)' }}
-                >
-                  <span className="relative z-10 group-hover:text-gray-900 transition-colors duration-500">
-                    Learn More
-                  </span>
-                  <div className="absolute inset-0 bg-white transform scale-0 rounded-full origin-top-left group-hover:scale-150 transition-transform duration-500 ease-out"></div>
-                </a>
-              ) : (
-                <button
-                  disabled
-                  className="bg-gray-300 text-gray-500 px-6 py-3 rounded-lg font-medium cursor-not-allowed"
-                  style={{ fontFamily: 'var(--font-poppins)' }}
-                >
-                  Contact for Sample
-                </button>
-              )}
+                             {products[active].status === "available" ? (
+                 <a
+                   href="#contact"
+                   className="group relative inline-block bg-amber-800 text-white px-6 py-3 rounded-lg overflow-hidden font-medium transition-all duration-500 border-2 border-amber-800"
+                   style={{ fontFamily: 'var(--font-poppins)' }}
+                 >
+                   <span className="relative z-10 group-hover:text-amber-800 transition-colors duration-500">
+                     Learn More
+                   </span>
+                   <div className="absolute inset-0 bg-white transform scale-0 rounded-full origin-top-left group-hover:scale-150 transition-transform duration-500 ease-out"></div>
+                 </a>
+               ) : (
+                 <button
+                   disabled
+                   className="bg-amber-800 text-white px-6 py-3 rounded-lg font-medium cursor-not-allowed opacity-60"
+                   style={{ fontFamily: 'var(--font-poppins)' }}
+                 >
+                   Contact for Sample
+                 </button>
+               )}
             </motion.div>
 
             {/* Navigation Buttons */}
@@ -255,20 +243,6 @@ export const AnimatedProducts = ({
         </div>
       </div>
 
-             {/* Bottom CTA */}
-       <div className="text-center mt-6">
-         <p className="text-sm text-gray-600 mb-2" style={{ fontFamily: 'var(--font-poppins)' }}>
-           Still have questions about our products?
-         </p>
-         <a
-           href="#contact"
-           className="group relative inline-block bg-amber-800 text-white px-5 py-2 rounded-lg overflow-hidden font-medium transition-all duration-500 border-2 border-amber-800"
-           style={{ fontFamily: 'var(--font-poppins)' }}
-         >
-           <span className="relative z-10 group-hover:text-amber-800 transition-colors duration-500">Contact Us</span>
-           <div className="absolute inset-0 bg-white transform scale-0 rounded-full origin-top-left group-hover:scale-150 transition-transform duration-500 ease-out"></div>
-         </a>
-       </div>
     </div>
   );
 };
